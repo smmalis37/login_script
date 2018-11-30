@@ -24,6 +24,7 @@ elif [ ${temp} -gt 60 ]; then
 else
   color_cpu=${color_green}
 fi
+temp="${temp}°C"
 
 # get memory
 free_output=$(free -h --si | grep Mem)
@@ -141,22 +142,22 @@ else
   color_public_electrum="${color_red}"
 fi
 
-printf "${color_yellow}${machinename}: ${color_gray}Status
-${color_yellow}------------------------------------------------------------
-${color_gray}%-40s${color_gray}IP %-17s${color_gray}
-${color_gray}%-40s${color_gray}CPU Temp ${color_cpu}${temp}°C
-${color_gray}Memory ${color_ram}%-13s${color_gray}SSD ${color_ssd}%-16s${color_gray}HDD ${color_hdd}%-16s
+printf "${color_yellow}${machinename}${color_gray}: Status
+${color_yellow}--------------------------------------------------------------
+${color_gray}%-40s    ${color_gray}IP %15s
+${color_gray}%-40s    ${color_gray}CPU Temp ${color_cpu}%10s
+${color_gray}Memory ${color_ram}%11s    ${color_gray}SSD ${color_ssd}%14s    ${color_gray}HDD ${color_hdd}%14s
 
-${color_yellow}%-22s%-22s
-${color_gray}%-12s%b%-8s${color_gray}%-12s%b%-8s
-${color_gray}%-12s%b%-8s${color_gray}%-12s%b%-8s
-${color_gray}%-12s%b%-8s${color_gray}%-12s%b%-8s
-${color_gray}%-12s%b%-8s${color_gray}%-12s%b%-8s
-${color_gray}%-12s%b%-8s${color_gray}%-12s%b%-8s
+${color_yellow}%-24s%-24s
+${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
+${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
+${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
+${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
+${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
 
 " \
 "${uptime}" "${public_ip}" \
-"${load}" \
+"${load}" "${temp}" \
 "${ram}" "${ssd}" "${hdd}" \
 "฿itcoin" "ElectrumX" \
 "Public" "${color_public_btc}" "${btc_public}" \
