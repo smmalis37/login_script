@@ -123,7 +123,7 @@ else
 fi
 
 # test bitcoin reachable
-btc_public_test=$(timeout 2s nc -z ${public_ip} 8333; echo $?)
+btc_public_test=$(nc -z ${public_ip} 8333; echo $?)
 if [ $btc_public_test = "0" ]; then
   btc_public="Yes"
   color_public_btc="${color_green}"
@@ -133,7 +133,7 @@ else
 fi
 
 # test electrumx reachable
-electrum_public_test=$(timeout 2s nc -z ${public_ip} 50002; echo $?)
+electrum_public_test=$(nc -z ${public_ip} 50002; echo $?)
 if [ $electrum_public_test = "0" ]; then
   electrum_public="Yes"
   color_public_electrum="${color_green}"
