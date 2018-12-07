@@ -5,6 +5,7 @@ color_red='\033[0;31m'
 color_green='\033[0;32m'
 color_yellow='\033[0;33m'
 color_gray='\033[0;37m'
+color_cyan='\033[0;36m'
 
 # get name, uptime & load
 machinename=$(uname -n)
@@ -142,6 +143,13 @@ else
   color_public_electrum="${color_red}"
 fi
 
+update_count=$(checkupdates | wc -l)
+if [ $update_count -gt 0 ]; then
+  color_updates=$color_cyan
+else
+  color_updates=$color_grey
+fi
+
 printf "${color_yellow}${machinename}${color_gray}: Status
 ${color_yellow}--------------------------------------------------------------
 ${color_gray}%-40s    ${color_gray}IP %15s
@@ -155,6 +163,8 @@ ${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
 ${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
 ${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
 
+${color_updates}${update_count} updates available
+${color_gray}
 " \
 "${uptime}" "${public_ip}" \
 "${load}" "${temp}" \
