@@ -175,8 +175,8 @@ ${color_gray}
 "Sync" "${color_sync_btc}" "${sync_btc}" \
 "Sync" "${color_sync_electrum}" "${sync_electrum}" \
 "Warnings" "${color_warnings}" "${warnings_text}" \
-"Sessions" "" "${sessions}" \
-"Peers" "" "${conns}" \
-"Subs" "" "${subs}" \
-"Mempool" "" "${mempool}" \
 "TXs" "" "${electrum_txs}" \
+"Peers" "" "${conns}" \
+"Sessions" "" "${sessions}" \
+"Mempool" "" "${mempool}" \
+"Subs" "" "${subs}" \
