@@ -10,7 +10,7 @@ color_cyan='\033[0;36m'
 # get name, uptime & load
 machinename=$(uname -n)
 uptime=$(uptime -p)
-load=$(uptime | awk '{ print $8,$9,$10,$11,$12 }')
+load=$(uptime | awk '{print $(NF-4), $(NF-3), $(NF-2), $(NF-1), $NF}')
 
 # get public IP address
 public_ip=$(curl -s ipinfo.io/ip)
@@ -94,7 +94,7 @@ else
 fi
 
 warnings="$(echo ${networkinfo} | jq -r '.warnings')"
-if [ -z ${warnings} ]; then
+if [ -z "${warnings}" ]; then
   warnings_text="No"
   color_warnings=${color_green}
 else
