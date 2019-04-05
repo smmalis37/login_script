@@ -143,7 +143,9 @@ else
   color_public_electrum="${color_red}"
 fi
 
-update_count=$(checkupdates | wc -l)
+official_update_count=$(checkupdates | wc -l)
+aur_update_count=$(pikaur -Qua 2> /dev/null | wc -l)
+update_count=$(expr $official_update_count + $aur_update_count)
 if [ $update_count -gt 0 ]; then
   color_updates=$color_cyan
 else
