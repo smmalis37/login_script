@@ -104,12 +104,12 @@ fi
 
 # get electrumx info
 electrumx_info=$(electrumx-rpc getinfo)
-sessions=$(echo ${electrumx_info} | jq -r '.sessions')
-subs=$(echo ${electrumx_info} | jq -r '.subs')
-electrum_txs=$(echo ${electrumx_info} | jq -r '.txs_sent')
+sessions=$(echo ${electrumx_info} | jq -r '.sessions.count')
+subs=$(echo ${electrumx_info} | jq -r '.sessions.subs')
+electrum_txs=$(echo ${electrumx_info} | jq -r '."txs sent"')
 
 # get electrumx sync
-block_verified_electrum="$(echo ${electrumx_info} | jq -r '.db_height')"
+block_verified_electrum=$(echo ${electrumx_info} | jq -r '."db height"')
 block_diff_electrum=$(expr ${block_chain} - ${block_verified_electrum})
 
 if [ ${block_diff_electrum} -eq 0 ]; then
