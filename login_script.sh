@@ -108,6 +108,9 @@ sessions=$(echo ${electrumx_info} | jq -r '.sessions.count')
 subs=$(echo ${electrumx_info} | jq -r '.sessions.subs')
 electrum_txs=$(echo ${electrumx_info} | jq -r '."txs sent"')
 
+# ignore rpc session
+sessions=$(expr ${sessions} - 1)
+
 # get electrumx sync
 block_verified_electrum=$(echo ${electrumx_info} | jq -r '."db height"')
 block_diff_electrum=$(expr ${block_chain} - ${block_verified_electrum})
