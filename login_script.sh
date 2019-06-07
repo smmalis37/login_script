@@ -148,8 +148,7 @@ fi
 
 official_update_count=$(checkupdates | wc -l)
 aur_update_count=$(pikaur -Qua 2> /dev/null | wc -l)
-update_count=$(expr $official_update_count + $aur_update_count)
-if [ $update_count -gt 0 ]; then
+if [ $official_update_count -gt 0 ] || [ $aur_update_count -gt 0 ]; then
   color_updates=$color_cyan
 else
   color_updates=$color_grey
@@ -168,7 +167,7 @@ ${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
 ${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
 ${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
 
-${color_updates}${update_count} updates available
+${color_updates}${official_update_count}+${aur_update_count} updates available
 ${color_gray}
 " \
 "${uptime}" "${public_ip}" \
