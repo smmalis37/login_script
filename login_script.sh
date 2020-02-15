@@ -29,12 +29,12 @@ temp="${temp}°C"
 
 # get memory
 free_output=$(free -h --si | grep Mem)
-ram_total=$(echo ${free_output} | awk '{ print $2 }')
-ram_used=$(echo ${free_output} | awk '{ print $3 }')
+ram_total=$(echo "${free_output}" | awk '{ print $2 }')
+ram_used=$(echo "${free_output}" | awk '{ print $3 }')
 ram=$(printf "${ram_used} / ${ram_total}")
 
-ram_free=$(echo ${free_output} | awk '{ print $7 }')
-if [ ${ram_free%?} -le 4 ]; then
+ram_free=$(echo "${free_output}" | awk '{ print $7 }')
+if [ "${ram_free%?}" -le 4 ]; then
   color_ram=${color_red}
 else
   color_ram=${color_green}
@@ -42,11 +42,11 @@ fi
 
 # get storage
 ssd_output=$(df -h | grep "/$")
-ssd_used=$(echo ${ssd_output} | awk '{ print $3 }')
-ssd_total=$(echo ${ssd_output} | awk '{ print $2 }')
-ssd_used_ratio=$(echo ${ssd_output} | awk '{ print $5 }')
+ssd_used=$(echo "${ssd_output}" | awk '{ print $3 }')
+ssd_total=$(echo "${ssd_output}" | awk '{ print $2 }')
+ssd_used_ratio=$(echo "${ssd_output}" | awk '{ print $5 }')
 ssd=$(printf "${ssd_used} / ${ssd_total}")
-if [ ${ssd_used_ratio%?} -ge 80 ]; then
+if [ "${ssd_used_ratio%?}" -ge 80 ]; then
   color_ssd=${color_red}
 else
   color_ssd=${color_green}
@@ -54,11 +54,11 @@ fi
 
 hdd_mount="/data" 
 hdd_output=$(df -h | grep ${hdd_mount})
-hdd_used=$(echo ${hdd_output} | awk '{ print $3 }')
-hdd_total=$(echo ${hdd_output} | awk '{ print $2 }')
-hdd_used_ratio=$(echo ${hdd_output} | awk '{ print $5 }')
+hdd_used=$(echo "${hdd_output}" | awk '{ print $3 }')
+hdd_total=$(echo "${hdd_output}" | awk '{ print $2 }')
+hdd_used_ratio=$(echo "${hdd_output}" | awk '{ print $5 }')
 hdd=$(printf "${hdd_used} / ${hdd_total}")
-if [ ${hdd_used_ratio%?} -ge 80 ]; then
+if [ "${hdd_used_ratio%?}" -ge 80 ]; then
   color_hdd=${color_red}
 else
   color_hdd=${color_green}
@@ -66,9 +66,9 @@ fi
 
 # get bitcoin sync
 getblockchaininfo=$(bitcoin-cli getblockchaininfo)
-block_chain="$(echo ${getblockchaininfo} | jq -r '.headers')"
-block_verified_btc="$(echo ${getblockchaininfo} | jq -r '.blocks')"
-block_diff_btc=$(expr ${block_chain} - ${block_verified_btc})
+block_chain="$(echo "${getblockchaininfo}" | jq -r '.headers')"
+block_verified_btc="$(echo "${getblockchaininfo}" | jq -r '.blocks')"
+block_diff_btc=$((block_chain - block_verified_btc))
 
 if [ ${block_diff_btc} -eq 0 ]; then
   sync_btc="OK"
@@ -86,14 +86,14 @@ mempool="$(bitcoin-cli getmempoolinfo | jq -r '.size')"
 
 # get bitcoin network info
 networkinfo=$(bitcoin-cli getnetworkinfo)
-conns="$(echo ${networkinfo} | jq -r '.connections')"
-if [ ${conns} -le 8 ]; then
+conns="$(echo "${networkinfo}" | jq -r '.connections')"
+if [ "${conns}" -le 8 ]; then
   color_conns=${color_red}
 else
   color_conns=${color_green}
 fi
 
-warnings="$(echo ${networkinfo} | jq -r '.warnings')"
+warnings="$(echo "${networkinfo}" | jq -r '.warnings')"
 if [ -z "${warnings}" ]; then
   warnings_text="No"
   color_warnings=${color_green}
@@ -104,16 +104,16 @@ fi
 
 # get electrumx info
 electrumx_info=$(electrumx-rpc getinfo)
-sessions=$(echo ${electrumx_info} | jq -r '.sessions.count')
-subs=$(echo ${electrumx_info} | jq -r '.sessions.subs')
-electrum_txs=$(echo ${electrumx_info} | jq -r '."txs sent"')
+sessions=$(echo "${electrumx_info}" | jq -r '.sessions.count')
+subs=$(echo "${electrumx_info}" | jq -r '.sessions.subs')
+electrum_txs=$(echo "${electrumx_info}" | jq -r '."txs sent"')
 
 # ignore rpc session
-sessions=$(expr ${sessions} - 1)
+sessions=$((sessions - 1))
 
 # get electrumx sync
-block_verified_electrum=$(echo ${electrumx_info} | jq -r '."db height"')
-block_diff_electrum=$(expr ${block_chain} - ${block_verified_electrum})
+block_verified_electrum=$(echo "${electrumx_info}" | jq -r '."db height"')
+block_diff_electrum=$((block_chain - block_verified_electrum))
 
 if [ ${block_diff_electrum} -eq 0 ]; then
   sync_electrum="OK"
@@ -127,8 +127,8 @@ else
 fi
 
 # test bitcoin reachable
-btc_public_test=$(nc -nz ${public_ip} 8333; echo $?)
-if [ $btc_public_test = "0" ]; then
+btc_public_test=$(nc -nz "${public_ip}" 8333; echo $?)
+if [ "$btc_public_test" = "0" ]; then
   btc_public="Yes"
   color_public_btc="${color_green}"
 else
@@ -137,8 +137,8 @@ else
 fi
 
 # test electrumx reachable
-electrum_public_test=$(nc -nz ${public_ip} 50002; echo $?)
-if [ $electrum_public_test = "0" ]; then
+electrum_public_test=$(nc -nz "${public_ip}" 50002; echo $?)
+if [ "$electrum_public_test" = "0" ]; then
   electrum_public="Yes"
   color_public_electrum="${color_green}"
 else
@@ -148,10 +148,10 @@ fi
 
 official_update_count=$(checkupdates | wc -l)
 aur_update_count=$(pikaur -Qua 2> /dev/null | wc -l)
-if [ $official_update_count -gt 0 ] || [ $aur_update_count -gt 0 ]; then
+if [ "$official_update_count" -gt 0 ] || [ "$aur_update_count" -gt 0 ]; then
   color_updates=$color_cyan
 else
-  color_updates=$color_grey
+  color_updates=$color_gray
 fi
 
 printf "${color_yellow}${machinename}${color_gray}: Status
@@ -180,7 +180,7 @@ ${color_gray}
 "Sync" "${color_sync_electrum}" "${sync_electrum}" \
 "Warnings" "${color_warnings}" "${warnings_text}" \
 "TXs" "" "${electrum_txs}" \
-"Peers" "" "${conns}" \
+"Peers" "${color_conns}" "${conns}" \
 "Sessions" "" "${sessions}" \
 "Mempool" "" "${mempool}" \
 "Subs" "" "${subs}" \
