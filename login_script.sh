@@ -29,9 +29,7 @@ temp="${temp}°C"
 
 # get memory
 free_output=$(free -h --si | grep Mem)
-ram_total=$(echo "${free_output}" | awk '{ print $2 }')
-ram_used=$(echo "${free_output}" | awk '{ print $3 }')
-ram=$(printf "${ram_used} / ${ram_total}")
+ram=$(echo "${free_output}" | awk '{ print $3 " / " $2 }')
 
 ram_free=$(echo "${free_output}" | awk '{ print $7 }')
 if [ "${ram_free%?}" -le 4 ]; then
@@ -42,10 +40,8 @@ fi
 
 # get storage
 ssd_output=$(df -h | grep "/$")
-ssd_used=$(echo "${ssd_output}" | awk '{ print $3 }')
-ssd_total=$(echo "${ssd_output}" | awk '{ print $2 }')
+ssd=$(echo "${ssd_output}" | awk '{ print $3 " / " $2 }')
 ssd_used_ratio=$(echo "${ssd_output}" | awk '{ print $5 }')
-ssd=$(printf "${ssd_used} / ${ssd_total}")
 if [ "${ssd_used_ratio%?}" -ge 80 ]; then
   color_ssd=${color_red}
 else
@@ -54,10 +50,8 @@ fi
 
 hdd_mount="/data" 
 hdd_output=$(df -h | grep ${hdd_mount})
-hdd_used=$(echo "${hdd_output}" | awk '{ print $3 }')
-hdd_total=$(echo "${hdd_output}" | awk '{ print $2 }')
+hdd=$(echo "${hdd_output}" | awk '{ print $3 " / " $2 }')
 hdd_used_ratio=$(echo "${hdd_output}" | awk '{ print $5 }')
-hdd=$(printf "${hdd_used} / ${hdd_total}")
 if [ "${hdd_used_ratio%?}" -ge 80 ]; then
   color_hdd=${color_red}
 else
@@ -146,6 +140,7 @@ else
   color_public_electrum="${color_red}"
 fi
 
+# check for package updates
 official_update_count=$(checkupdates | wc -l)
 aur_update_count=$(pikaur -Qua 2> /dev/null | wc -l)
 if [ "$official_update_count" -gt 0 ] || [ "$aur_update_count" -gt 0 ]; then
@@ -154,6 +149,7 @@ else
   color_updates=$color_gray
 fi
 
+# output
 printf "${color_yellow}${machinename}${color_gray}: Status
 ${color_yellow}--------------------------------------------------------------
 ${color_gray}%-40s    ${color_gray}IP %15s
