@@ -16,7 +16,7 @@ load=$(uptime | awk '{print $(NF-4), $(NF-3), $(NF-2), $(NF-1), $NF}')
 public_ip=$(curl -s ifconfig.me)
 
 # get CPU temp
-cpu=$(cat /sys/class/thermal/thermal_zone3/temp)
+cpu=$(cat /sys/class/thermal/thermal_zone4/temp)
 temp=$((cpu/1000))
 if [ ${temp} -gt 80 ]; then
   color_cpu=${color_red}
