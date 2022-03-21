@@ -16,7 +16,7 @@ load=$(uptime | awk '{print $(NF-4), $(NF-3), $(NF-2), $(NF-1), $NF}')
 public_ip=$(curl -s ifconfig.me)
 
 # get CPU temp
-cpu=$(cat /sys/class/thermal/thermal_zone4/temp)
+cpu=$(cat /sys/class/thermal/thermal_zone3/temp)
 temp=$((cpu/1000))
 if [ ${temp} -gt 80 ]; then
   color_cpu=${color_red}
@@ -107,7 +107,8 @@ sessions=$((sessions - 1))
 
 # get electrumx sync
 block_verified_electrum=$(echo "${electrumx_info}" | jq -r '."db height"')
-block_diff_electrum=$((block_chain - block_verified_electrum))
+block_bitcoind=$(echo "${electrumx_info}" | jq -r '."daemon height"')
+block_diff_electrum=$((block_bitcoind - block_verified_electrum))
 
 if [ ${block_diff_electrum} -eq 0 ]; then
   sync_electrum="OK"
