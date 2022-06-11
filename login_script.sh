@@ -39,7 +39,7 @@ else
 fi
 
 # get storage
-ssd_output=$(df -h | grep "/$")
+ssd_output=$(df -H | grep "/$")
 ssd=$(echo "${ssd_output}" | awk '{ print $3 " / " $2 }')
 ssd_used_ratio=$(echo "${ssd_output}" | awk '{ print $5 }')
 if [ "${ssd_used_ratio%?}" -ge 80 ]; then
@@ -49,7 +49,7 @@ else
 fi
 
 hdd_mount="/data" 
-hdd_output=$(df -h | grep ${hdd_mount})
+hdd_output=$(df -H | grep ${hdd_mount})
 hdd=$(echo "${hdd_output}" | awk '{ print $3 " / " $2 }')
 hdd_used_ratio=$(echo "${hdd_output}" | awk '{ print $5 }')
 if [ "${hdd_used_ratio%?}" -ge 80 ]; then
