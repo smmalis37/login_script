@@ -16,7 +16,7 @@ load=$(uptime | awk '{print $(NF-4), $(NF-3), $(NF-2), $(NF-1), $NF}')
 public_ip=$(curl -s ifconfig.me)
 
 # get CPU temp
-cpu=$(cat /sys/class/thermal/thermal_zone3/temp)
+cpu=$(cat /sys/class/thermal/thermal_zone4/temp)
 temp=$((cpu/1000))
 if [ ${temp} -gt 80 ]; then
   color_cpu=${color_red}
@@ -97,18 +97,17 @@ else
 fi
 
 # get electrumx info
-electrumx_info=$(electrumx-rpc getinfo)
-sessions=$(echo "${electrumx_info}" | jq -r '.sessions.count')
-subs=$(echo "${electrumx_info}" | jq -r '.sessions.subs')
-electrum_txs=$(echo "${electrumx_info}" | jq -r '."txs sent"')
+electrumx_info=$(fulcrum-admin -p 8789 getinfo)
+sessions=$(echo "${electrumx_info}" | jq -r '.clients_connected')
+subs=$(echo "${electrumx_info}" | jq -r '.subscriptions')
+electrum_txs=$(echo "${electrumx_info}" | jq -r '.txs_sent')
 
 # ignore rpc session
 sessions=$((sessions - 1))
 
 # get electrumx sync
-block_verified_electrum=$(echo "${electrumx_info}" | jq -r '."db height"')
-block_bitcoind=$(echo "${electrumx_info}" | jq -r '."daemon height"')
-block_diff_electrum=$((block_bitcoind - block_verified_electrum))
+block_verified_electrum=$(echo "${electrumx_info}" | jq -r '.height')
+block_diff_electrum=$((block_verified_btc - block_verified_electrum))
 
 if [ ${block_diff_electrum} -eq 0 ]; then
   sync_electrum="OK"
@@ -155,7 +154,7 @@ printf "${color_yellow}${machinename}${color_gray}: Status
 ${color_yellow}--------------------------------------------------------------
 ${color_gray}%-40s    ${color_gray}IP %15s
 ${color_gray}%-40s    ${color_gray}CPU Temp ${color_cpu}%10s
-${color_gray}Memory ${color_ram}%11s    ${color_gray}SSD ${color_ssd}%14s    ${color_gray}HDD ${color_hdd}%14s
+${color_gray}Memory ${color_ram}%11s    ${color_gray}SSD ${color_ssd}%14s    ${color_gray}Data ${color_hdd}%13s
 
 ${color_yellow}%-24s%-24s
 ${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
