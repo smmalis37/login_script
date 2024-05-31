@@ -102,9 +102,6 @@ sessions=$(echo "${electrumx_info}" | jq -r '.clients_connected')
 subs=$(echo "${electrumx_info}" | jq -r '.subscriptions')
 electrum_txs=$(echo "${electrumx_info}" | jq -r '.txs_sent')
 
-# ignore rpc session
-sessions=$((sessions - 1))
-
 # get electrumx sync
 block_verified_electrum=$(echo "${electrumx_info}" | jq -r '.height')
 block_diff_electrum=$((block_verified_btc - block_verified_electrum))
@@ -154,7 +151,7 @@ printf "${color_yellow}${machinename}${color_gray}: Status
 ${color_yellow}--------------------------------------------------------------
 ${color_gray}%-40s    ${color_gray}IP %15s
 ${color_gray}%-40s    ${color_gray}CPU Temp ${color_cpu}%10s
-${color_gray}Memory ${color_ram}%11s    ${color_gray}SSD ${color_ssd}%14s    ${color_gray}Data ${color_hdd}%13s
+${color_gray}Memory ${color_ram}%11s    ${color_gray}/ ${color_ssd}%16s    ${color_gray}Data ${color_hdd}%13s
 
 ${color_yellow}%-24s%-24s
 ${color_gray}%-10s%b%8s    ${color_gray}%-10s%b%8s
@@ -169,7 +166,7 @@ ${color_gray}
 "${uptime}" "${public_ip}" \
 "${load}" "${temp}" \
 "${ram}" "${ssd}" "${hdd}" \
-"฿itcoin" "ElectrumX" \
+"฿itcoin" "Fulcrum" \
 "Public" "${color_public_btc}" "${btc_public}" \
 "Public" "${color_public_electrum}" "${electrum_public}" \
 "Sync" "${color_sync_btc}" "${sync_btc}" \
