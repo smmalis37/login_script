@@ -88,7 +88,7 @@ else
 fi
 
 warnings="$(echo "${networkinfo}" | jq -r '.warnings')"
-if [ -z "${warnings}" ]; then
+if [ "${warnings}" = "[]" ]; then
   warnings_text="No"
   color_warnings=${color_green}
 else
@@ -101,6 +101,10 @@ electrumx_info=$(fulcrum-admin -p 8789 getinfo)
 sessions=$(echo "${electrumx_info}" | jq -r '.clients_connected')
 subs=$(echo "${electrumx_info}" | jq -r '.subscriptions')
 electrum_txs=$(echo "${electrumx_info}" | jq -r '.txs_sent')
+
+# ignore rpc session
+sessions=$((sessions - 2))
+
 
 # get electrumx sync
 block_verified_electrum=$(echo "${electrumx_info}" | jq -r '.height')
