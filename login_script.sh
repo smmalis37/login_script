@@ -13,7 +13,7 @@ uptime=$(uptime -p)
 load=$(uptime | awk '{print $(NF-4), $(NF-3), $(NF-2), $(NF-1), $NF}')
 
 # get public IP address
-public_ip=$(curl -s ifconfig.me)
+public_ip=$(curl -s4 ifconfig.me)
 
 # get CPU temp
 cpu=$(cat /sys/class/thermal/thermal_zone4/temp)
